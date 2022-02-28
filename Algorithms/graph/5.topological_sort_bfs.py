@@ -1,6 +1,11 @@
 from collections import defaultdict
 from collections import deque
 
+# Used to figure out ordering when dependencies are involved
+# Application:
+#       1. yum package installer searches for package dependencies using topological sort
+#       2. Used to decide in which order to load tables with foreign keys in databases.
+#       3. Ordering of formula cell evaluation when recomputing formula values in spreadsheets, logic synthesis.
 # Complexity Analysis:
 #       V is number of vertices
 #       E is number of edges

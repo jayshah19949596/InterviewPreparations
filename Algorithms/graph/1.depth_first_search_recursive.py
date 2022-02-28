@@ -19,12 +19,16 @@ class Graph(object):
         self.graph[from_node].remove(to_node)
 
     def depth_first_search(self, start_node):
-        visited = set([])
-        self.dfs_recurse(start_node, visited)
+        visited, dfs_output = set([]), []
 
-    def dfs_recurse(self, cur_node, visited):
-        if cur_node in visited: return
-        print(cur_node)
-        visited.add(cur_node)
-        for neighbor in self.graph[cur_node]:
-            self.dfs_recurse(neighbor, visited)
+        def dfs_recurse(cur_node, visited):
+            if cur_node in visited: return
+            dfs_output.append(cur_node)
+            visited.add(cur_node)
+            for neighbor in self.graph[cur_node]:
+                self.dfs_recurse(neighbor, visited)
+
+        dfs_recurse(start_node, visited)
+        return dfs_output
+
+

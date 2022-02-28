@@ -20,11 +20,12 @@ class Graph(object):
 
     def bread_first_search(self, start_node):
         queue = deque([start_node])
-        visited = set()
+        visited, bfs_output = set(), []
         while queue:
             cur_node = queue.popleft()
             if cur_node in visited: continue
             visited.add(cur_node)
-            print(cur_node)
+            bfs_output.append(cur_node)
             for neighbor in self.graph[cur_node]:
                 queue.append(neighbor)
+        return bfs_output

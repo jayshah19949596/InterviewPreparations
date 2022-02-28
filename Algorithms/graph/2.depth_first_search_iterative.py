@@ -19,12 +19,13 @@ class Graph(object):
 
     def depth_first_search(self, start_node):
         stack = [start_node]
-        visited = set([])
+        visited, dfs_output = set([]), []
         while stack:
             cur_node = stack.pop()
             if cur_node in visited: continue
             visited.add(cur_node)
-            print(cur_node)
+            dfs_output.append(cur_node)
             for neighbor in self.graph[cur_node]:
                 stack.append(neighbor)
+        return dfs_output
 

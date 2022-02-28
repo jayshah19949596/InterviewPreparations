@@ -13,30 +13,29 @@
 # Explaination:
 # https://leetcode.com/problems/maximum-number-of-points-with-cost/discuss/1344908/C%2B%2BJavaPython-3-DP-Explanation-with-pictures.
 # Time - O(rows*cols)
-
 class Solution:
     def maxPoints(self, array: List[List[int]]) -> int:
         rows, cols = len(array), len(array[0])
         if rows == 1: return max(array[0])
         if cols == 1: return sum(sum(x) for x in array)
 
-        def left(prv_row):
-            lft = [prv_row[0]] + [0] * (cols - 1)
+        def left(prev_array):
+            left_array = [prev_array[0]] + [0] * (cols - 1)
             for col in range(1, cols):
-                lft[col] = max(lft[col - 1] - 1, prv_row[col])  # max(lft[col-1] - ABS((col-1)-col), prv_row[col])
-            return lft
+                left_array[col] = max(left_array[col - 1] - 1, prev_array[col])  # max(lft[col-1] - ABS((col-1)-col), prv_row[col])
+            return left_array
 
-        def right(prv_row):
-            rgt = [0] * (cols - 1) + [prv_row[-1]]
+        def right(prev_array):
+            right_array = [0] * (cols - 1) + [prev_array[-1]]
             for col in range(cols - 2, -1, -1):
-                rgt[col] = max(rgt[col + 1] - 1, prv_row[col])  # max(rgt[col-1] - ABS((col-(col+1)), prv_row[col])
-            return rgt
+                right_array[col] = max(right_array[col + 1] - 1, prev_array[col])  # max(rgt[col-1] - ABS((col-(col+1)), prv_row[col])
+            return right_array
 
         prev_row = array[0]
-        for row in range(rows - 1):
-            lft, rgt, cur_row = left(prev_row), right(prev_row), [0] * cols
+        for row in range(1, rows):
+            left_row, right_row, cur_row = left(prev_row), right(prev_row), [0] * cols
             for col in range(cols):
-                cur_row[col] = array[row + 1][col] + max(lft[col], rgt[col])
-            prev_row = cur_row[:]
+                cur_row[col] = array[row][col] + max(left_row[col], right_row[col])
+            prev_row = cur_row
         return max(cur_row)
 
