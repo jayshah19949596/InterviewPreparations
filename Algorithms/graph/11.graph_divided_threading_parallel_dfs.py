@@ -1,9 +1,9 @@
 """
-  2   0   1
-  \  |  /
-     3
- /  |  \
-5   4   6
+  2   0     1
+  \  |  /  | | \
+     3     8 9 10
+ /  |  \      /  \
+5   4   6    11  12
     |
     7
 Reference: https://en.wikipedia.org/wiki/Parallel_breadth-first_search
@@ -15,6 +15,7 @@ from collections import deque, defaultdict
 class Graph():
     def __init__(self):
         self.graph = defaultdict(list)
+        self.lock = threading.Lock()
 
     def add_relation(self, from_node, to_node):
         self.graph[from_node].add(to_node)
@@ -26,8 +27,11 @@ class Graph():
         results.append(current_node)
         for neighbor in self.graph[current_node]:
             if neighbor not in visited:
+                self.lock.acquire()
                 visited.add(neighbor)
+                self.lock.release()
                 self.visit_neighbors_in_dfs(neighbor, results, visited)
+        threading.current_thread().return_value = results
 
     def parallel_depth_first_search(self, stack):
         visited = set([])
@@ -37,21 +41,25 @@ class Graph():
         for current_node in stack:
             # Parallel traversal for each seed node
             visited.add(current_node)
-            thread = threading.Thread(target=self.visit_neighbors_in_dfs, args=(current_node, results, visited))
+            thread = threading.Thread(target=self.visit_neighbors_in_dfs, args=(current_node, [], visited))
             threads.append(thread)
             thread.start()
         else:
+            merged_results = []
             for thread in threads:
                 thread.join() # Barrier synchronization
-        print(results)  # printing node in DFS order
+                merged_results = merged_results+thread.return_value
+        print(merged_results)  # Nodes printed in DFS order
+
 
     def parallel_bfs_executor(self):
         self.graph[0] = [3]
-        self.graph[1] = [3]
+        self.graph[1] = [3, 8, 9, 10]
+        self.graph[10] = [11, 12]
         self.graph[2] = [3]
         self.graph[3] = [4, 5, 6]
         self.graph[4] = [7]
-        self.parallel_depth_first_search([0, 1, 2])
+        self.parallel_depth_first_search([0, 2, 1])
 
 
 graph_obj = Graph()
