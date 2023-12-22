@@ -36,7 +36,7 @@ class Graph():
             print(cur_level)
 
             for current_node in cur_level:
-                # This for block is parallelized
+                # This for block is paralellized
                 thread = threading.Thread(target=self.visit_neighbors, args=(current_node, next_level, visited))
                 threads.append(thread)
                 thread.start()
