@@ -4,7 +4,7 @@
     1
  /  |  \
 2   3   4
-    |
+ \  |  /
     5
 Reference: https://en.wikipedia.org/wiki/Parallel_breadth-first_search
 """
@@ -15,6 +15,7 @@ from collections import deque, defaultdict
 class Graph():
     def __init__(self):
         self.graph = defaultdict(set)
+        self.lock = threading.Lock()
 
     def add_relation(self, from_node, to_node):
         self.graph[from_node].add(to_node)
@@ -25,7 +26,9 @@ class Graph():
     def visit_neighbors(self, current_node, next_level, visited):
         for neighbor in self.graph[current_node]:
             if neighbor not in visited:
+                self.lock.acquire()
                 visited.add(neighbor)
+                self.lock.release()
                 next_level.append(neighbor)
 
     def parallel_bread_first_search(self, seed_node):
@@ -46,13 +49,11 @@ class Graph():
             cur_level = next_level
 
     def parallel_bfs_executor(self):
-        self.add_relation(0, 1)
-        self.add_relation(1, 2)
-        self.add_relation(1, 3)
-        self.add_relation(1, 4)
-        self.add_relation(2, 5)
-        self.add_relation(3, 5)
-        self.add_relation(4, 5)
+        self.graph[0] = set([1])
+        self.graph[1] = set([2, 3, 4])
+        self.graph[2] = set([5])
+        self.graph[3] = set([5])
+        self.graph[4] = set([5])
         self.parallel_bread_first_search(0)
 
 
