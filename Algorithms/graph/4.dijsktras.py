@@ -41,4 +41,4 @@ class Graph(object):
             visited.add(cur_node)
             for neighbor, neighbor_weight in self.graph[cur_node]:
                 queue.append((neighbor, cur_weight+neighbor_weight, path+[neighbor]))
-        return []
+        return []  #  No path from current node to end node
