@@ -46,7 +46,7 @@ class Graph():
             print(cur_level)
 
             for current_node in cur_level:
-                # This for block is paralellized
+                # This for loop block is paralellized
                 thread = threading.Thread(target=self.visit_neighbors, args=(current_node, next_level, visited))
                 threads.append(thread)
                 if len(threads)>self.max_no_of_thread: # Restrict the maximum number of threads
