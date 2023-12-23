@@ -25,11 +25,8 @@ class Graph(object):
 
     def topological_ordering(self):
         in_degree = defaultdict(int)
-        for u, v in self.graph.items():
-            in_degree[v] += 1
-
-        queue = deque([node for node in in_degree if in_degree[node] == 0])
-        visited = set([])
+        for u, v in self.graph.items(): in_degree[v] += 1
+        queue, visited = deque([node for node in in_degree if in_degree[node] == 0]), set([])
         while queue:
             cur_node = queue.popleft()
             print(cur_node)
