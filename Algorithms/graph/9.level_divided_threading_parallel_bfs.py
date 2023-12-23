@@ -28,6 +28,7 @@ class Graph():
     def visit_neighbors(self, current_node, next_level, visited):
         for neighbor in self.graph[current_node]:
             if neighbor not in visited:
+                # Applying MUTEX lock to protect critical section of updating shared resources from race condition
                 self.lock.acquire()
                 visited.add(neighbor)
                 self.lock.release()
