@@ -16,6 +16,7 @@ class Graph():
     def __init__(self):
         self.graph = defaultdict(list)
         self.lock = threading.Lock()
+        self.max_no_of_thread = 4
 
     def add_relation(self, from_node, to_node):
         self.graph[from_node].add(to_node)
@@ -35,7 +36,7 @@ class Graph():
 
     def parallel_depth_first_search(self, stack):
         visited = set([])
-        results, threads = [], []
+        merged_results, results, threads = [], [], deque([])
 
         # Performing parallel DFS for each seed node.
         for current_node in stack:
@@ -43,9 +44,12 @@ class Graph():
             visited.add(current_node)
             thread = threading.Thread(target=self.visit_neighbors_in_dfs, args=(current_node, [], visited))
             threads.append(thread)
+            if len(threads) > self.max_no_of_thread:  # Restrict the maximum number of threads
+                threads[0].join()
+                merged_results = merged_results+threads.popleft().return_value
+
             thread.start()
         else:
-            merged_results = []
             for thread in threads:
                 thread.join() # Barrier synchronization
                 merged_results = merged_results+thread.return_value

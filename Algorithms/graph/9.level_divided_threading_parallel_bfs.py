@@ -9,6 +9,7 @@
 Reference: https://en.wikipedia.org/wiki/Parallel_breadth-first_search
 """
 import threading
+import concurrent.futures
 from collections import deque, defaultdict
 
 
@@ -16,6 +17,7 @@ class Graph():
     def __init__(self):
         self.graph = defaultdict(set)
         self.lock = threading.Lock()
+        self.max_no_of_thread = 4
 
     def add_relation(self, from_node, to_node):
         self.graph[from_node].add(to_node)
@@ -33,18 +35,22 @@ class Graph():
 
     def parallel_bread_first_search(self, seed_node):
         cur_level, visited = deque([seed_node]), set([seed_node])
+        pool = concurrent.futures.ThreadPoolExecutor(max_workers=2)
 
         while cur_level:
-            threads, next_level = [], deque([])
+            threads, next_level = deque([]), deque([])
             print(cur_level)
 
             for current_node in cur_level:
                 # This for block is paralellized
                 thread = threading.Thread(target=self.visit_neighbors, args=(current_node, next_level, visited))
                 threads.append(thread)
+                if len(threads)>self.max_no_of_thread: # Restrict the maximum number of threads
+                    threads[0].join()
+                    threads.popleft()
                 thread.start()
             else:
-                for thread in threads: thread.join() # Barrier synchronization
+                for thread in threads: thread.join()  # Barrier synchronization to stope execution of current program
 
             cur_level = next_level
 
