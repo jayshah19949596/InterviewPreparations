@@ -33,9 +33,9 @@ class Graph(object):
         self.graph.remove(to_node, to_weigh)
 
     def dijkstra_shortest_path(self, start_node, end_node):
-        queue, visited = [[start_node, 0, []]], set()
+        queue, visited = [[0, start_node, []]], set()
         while queue:
-            cur_node, cur_weight, path = heapq.heappop(queue)
+            cur_weight, cur_node, path = heapq.heappop(queue)
             if cur_node == end_node: return path
             if cur_node in visited: continue
             visited.add(cur_node)

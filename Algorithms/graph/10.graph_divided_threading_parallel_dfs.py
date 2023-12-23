@@ -59,7 +59,6 @@ class Graph():
                 merged_results = merged_results+thread.return_value
         print(merged_results)  # Nodes printed in DFS order
 
-
     def parallel_bfs_executor(self):
         self.graph[0] = [3]
         self.graph[1] = [3, 8, 9, 10]
