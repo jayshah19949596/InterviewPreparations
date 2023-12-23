@@ -35,6 +35,9 @@ class Graph():
         threading.current_thread().return_value = results
 
     def parallel_depth_first_search(self, stack):
+        """
+            Different threads handle different path of the graph search space concurrently.
+        """
         visited = set([])
         merged_results, results, threads = [], [], deque([])
 

@@ -34,6 +34,9 @@ class Graph():
                 next_level.append(neighbor)
 
     def parallel_bread_first_search(self, seed_node):
+        """
+            Different threads handle different level of the graph search space concurrently.
+        """
         cur_level, visited = deque([seed_node]), set([seed_node])
         pool = concurrent.futures.ThreadPoolExecutor(max_workers=2)
 
