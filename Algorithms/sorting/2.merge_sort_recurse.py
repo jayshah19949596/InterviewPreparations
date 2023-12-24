@@ -1,5 +1,7 @@
 """
 Reference Image: https://www.geeksforgeeks.org/merge-sort/
+Time: O(N*log(N))
+Space: O(N)
 """
 class Solution:
     def sortArray(self, nums: List[int]) -> List[int]:
