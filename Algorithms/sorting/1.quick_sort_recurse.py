@@ -34,11 +34,11 @@ def partition(array, low, high):
 
 def quick_sort(array, low, high):
     if low < high:
-        pi = partition(array, low, high)  # pi is partitioning index, arr[p] is now at right place
+        pivot_index = partition(array, low, high)  # pi is partitioning index, arr[p] is now at right place
 
         # Separately sort elements before partition and after partition
-        quick_sort(array, low, pi - 1)
-        quick_sort(array, pi + 1, high)
+        quick_sort(array, low, pivot_index - 1)
+        quick_sort(array, pivot_index + 1, high)
 
 
 nums = [2, 6, 5, 3, 8, 7, 1, 0]

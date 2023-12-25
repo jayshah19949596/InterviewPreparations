@@ -1,13 +1,12 @@
 def partition(arr, low, high):
-    pivot = arr[high]
-    i = low - 1
-
+    i = low - 1  # index of smaller element
+    pivot_idx = high
+    pivot_element = array[pivot_idx]  # pivot element
     for j in range(low, high):
-        if arr[j] <= pivot:
+        if arr[j] <= pivot_element:
             i += 1
             arr[i], arr[j] = arr[j], arr[i]
-
-    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    array[i + 1], array[pivot_idx] = array[pivot_idx], array[i + 1]
     return i + 1
 
 def quickselect(arr, low, high, k):
@@ -30,7 +29,7 @@ def find_kth_largest(arr, k):
         return "Invalid value of k"
 
 # Example usage
-arr = [5, 6, 9, 1, 2, 2, 10]
+arr = [50, 5, 6, 9, 2, 2, 10, 1, 52]
 k = 3
 result = find_kth_largest(arr, k)
-print(f"The {k}-th largest element is: {result}")
+print(f"The {k}-th largest element is: {result} and array has changed to: {arr}")
