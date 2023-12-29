@@ -39,7 +39,6 @@ class Graph():
             Different threads handle different level of the graph search space concurrently.
         """
         cur_level, visited = deque([seed_node]), set([seed_node])
-        pool = concurrent.futures.ThreadPoolExecutor(max_workers=2)
 
         while cur_level:
             threads, next_level = deque([]), deque([])
@@ -49,12 +48,12 @@ class Graph():
                 # This for loop block is paralellized
                 thread = threading.Thread(target=self.visit_neighbors, args=(current_node, next_level, visited))
                 threads.append(thread)
-                if len(threads)>self.max_no_of_thread: # Restrict the maximum number of threads
+                if len(threads)>self.max_no_of_thread:  # Restrict the maximum number of threads
                     threads[0].join()
                     threads.popleft()
                 thread.start()
             else:
-                for thread in threads: thread.join()  # Barrier synchronization to stope execution of current program
+                for thread in threads: thread.join()  # Barrier synchronization to stop execution of current program
 
             cur_level = next_level
 
