@@ -35,6 +35,7 @@ walk = 3*4 cells = 12, 0
 bike = 2*4 cells =  8, 1*3 = 1
 car = 10*1 = 10,
 """
+
 from collections import deque
 from collections import defaultdict
 
@@ -63,26 +64,28 @@ def get_neightbors(cur_row, cur_col, n, m):
 
 
 def find_transportation(mat, cost_list, time_list):
-    start, end = find_start_end(mat)
-    start_val = mat[start[0]][start[1]]
-    queue = deque([[[start[0], start[1]], start_val, 0, 0]])
     trans_mode_map = defaultdict(list)
     visited = set([])
-    visited.add((start[0], start[1]))
+    start, end = find_start_end(mat)
+    start_val = mat[start[0]][start[1]]
+    queue = deque([])
+
+    neighbors = get_neightbors(start[0], start[1], len(mat), len(mat[0]))
+    for nr, nc in neighbors:
+        value = mat[nr][nc]
+        cost, time = 0, 0
+        if value.isdigit():
+            cost = cost_list[int(value) - 1]
+            time = time_list[int(value) - 1]
+        queue.appendleft([[nr, nc], value, time, cost])
+        visited.add((nr, nc))
 
     while queue:
-        # print(queue)
+        print(queue)
         cur_cell, cur_val, cur_time, cur_cost = queue.pop()
-        if cur_val == "D":
-            if cur_val in trans_mode_map and trans_mode_map[cur_val][0] > cur_time:
-                trans_mode_map[cur_val] = [cur_time, cur_cost]
-            elif cur_val in trans_mode_map and trans_mode_map[cur_val][0] == cur_time and trans_mode_map[cur_val][
-                1] > cur_cost:
-                trans_mode_map[cur_val] = [cur_time, cur_cost]
-            else:
-                trans_mode_map[cur_val] = [cur_time, cur_cost]
 
         neighbors = get_neightbors(cur_cell[0], cur_cell[1], len(grid), len(grid[0]))
+
         for nr, nc in neighbors:
             value = mat[nr][nc]
             cost, time = 0, 0
@@ -90,9 +93,14 @@ def find_transportation(mat, cost_list, time_list):
                 cost = cost_list[int(value) - 1]
                 time = time_list[int(value) - 1]
 
-            if cur_val in ["S", "D"] and:
-                visited.add((nr, nc))
-                queue.appendleft([[nr, nc], cur_val, cur_time + time, cur_cost + cost])
+            if value == "D":
+                if cur_val in trans_mode_map and trans_mode_map[cur_val][0] > cur_time + time:
+                    trans_mode_map[cur_val] = [cur_time + time, cur_cost + cost]
+                elif cur_val in trans_mode_map and trans_mode_map[cur_val][0] == cur_time + time and \
+                        trans_mode_map[cur_val][1] > cur_cost + cost:
+                    trans_mode_map[cur_val] = [cur_time + time, cur_cost + cost]
+                else:
+                    trans_mode_map[cur_val] = [cur_time + time, cur_cost + cost]
             elif value != "X" and cur_val == value and (nr, nc) not in visited:
                 visited.add((nr, nc))
                 queue.appendleft([[nr, nc], cur_val, cur_time + time, cur_cost + cost])
