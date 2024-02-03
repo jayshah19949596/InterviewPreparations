@@ -71,21 +71,19 @@ Example table of inputs and outputs:
 | /x/y     | /p/./q         | /p/q 
 """
 
+
 def mock_cd(cwd, argument):
     argument_list = argument.split("/")
 
-    if argument[0] == "/":
-        output_dir = []
-    else:
-        output_dir = cwd.split("/")
+    if argument[0] == "/": output_dir = []
+    else: output_path = cwd.split("/")
 
     for element in argument_list:
-        if element == ".."
-            if output_dir:
-                output_dir.pop()
+        if element == "..":
+            if output_path: output_path.pop()
         elif element == ".":
             continue
         else:
-            output_dir.append(element)
+            output_path.append(element)
 
-    return "/" +"/".join(output_dir)
+    return "/" + "/".join(output_path)
