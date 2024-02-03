@@ -88,5 +88,4 @@ def mock_cd(cwd, argument):
         else:
             output_dir.append(element)
 
-    return "/" +."/"
-    join(output_dir)
+    return "/" +"/".join(output_dir)
